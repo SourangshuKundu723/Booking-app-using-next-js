@@ -17,7 +17,7 @@ export default function BookingForm({
         phone: "",
         date: "",
         time: "",
-        seating: "Indoor",
+        seating: "",
         request: "",
         newsletter: false,
     });
@@ -51,7 +51,7 @@ export default function BookingForm({
             phone: "",
             date: "",
             time: "",
-            seating: "Indoor",
+            seating: "",
             request: "",
             newsletter: false,
         });
@@ -100,6 +100,7 @@ export default function BookingForm({
                     />
                 </div>
 
+                <label className="text-sm font-medium">Date & Time</label>
                 {/* Date + Time */}
                 <div className="grid grid-cols-2 gap-4">
                     <Input
