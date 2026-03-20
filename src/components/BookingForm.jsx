@@ -4,13 +4,9 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
 
-export default function BookingForm({
-    bookings,
-    setBookings,
-    editData,
-    setEditData,
-}) {
+export default function BookingForm({ bookings, setBookings, editData, setEditData }) {
     const [form, setForm] = useState({
         firstName: "",
         lastName: "",
@@ -29,22 +25,66 @@ export default function BookingForm({
     }, [editData]);
 
     const handleSubmit = () => {
-        if (!form.firstName || !form.phone) {
-            alert("Please fill required fields");
+        const pattern = /^\d{10}$/;
+        if (!form.firstName) {
+            toast.warning("Please enter the first name!");
+            return;
+        }
+        else if (!form.lastName) {
+            toast.warning("Please enter the last name!");
+            return;
+        }
+        else if (!form.phone || !pattern.test(form.phone)) {
+            toast.warning("Please enter a valid 10 digit phone number!");
+            return;
+        }
+        else if (!form.date) {
+            toast.warning("Please select a date!");
+            return;
+        }
+        else if (!form.time) {
+            toast.warning("Please select time!");
+            return;
+        }
+        else if (!form.seating) {
+            toast.warning("Please select a seating preference!");
             return;
         }
 
         if (editData) {
-            const updated = bookings.map((b) =>
-                b.id === editData.id ? { ...form, id: b.id } : b
-            );
-            setBookings(updated);
+            const updatedBookings = [];
+            for (let i = 0; i < bookings.length; i++) {
+                if (bookings[i].id === editData.id) {
+                    updatedBookings.push({ ...form, id: editData.id });
+                } else {
+                    updatedBookings.push(bookings[i]);
+                }
+            }
+            setBookings(updatedBookings);
             setEditData(null);
-        } else {
-            setBookings([...bookings, { ...form, id: Date.now() }]);
+            toast.success("Booking updated successfully!")
+        }
+        else {
+            const newBooking = { ...form, id: Date.now() };
+            setBookings([...bookings, newBooking]);
+            toast.success("Booking added successfully!")
         }
 
-        // reset
+        setForm({
+            firstName: "",
+            lastName: "",
+            phone: "",
+            date: "",
+            time: "",
+            seating: "",
+            request: "",
+            newsletter: false,
+        });
+    };
+
+    const handleCancel = () => {
+        setEditData(null);
+
         setForm({
             firstName: "",
             lastName: "",
@@ -59,11 +99,10 @@ export default function BookingForm({
 
     return (
         <div className="bg-white p-6 rounded-2xl shadow-lg">
-            <h2 className="text-2xl font-bold mb-4">Booking Form</h2>
+            <h2 className="text-2xl font-bold text-center mb-4">Booking Form</h2>
 
             <div className="space-y-4">
 
-                {/* First + Last Name */}
                 <div className="grid grid-cols-2 gap-4">
                     <div>
                         <label className="text-sm font-medium">First Name</label>
@@ -88,7 +127,6 @@ export default function BookingForm({
                     </div>
                 </div>
 
-                {/* Phone */}
                 <div>
                     <label className="text-sm font-medium">Phone</label>
                     <Input
@@ -101,7 +139,6 @@ export default function BookingForm({
                 </div>
 
                 <label className="text-sm font-medium">Date & Time</label>
-                {/* Date + Time */}
                 <div className="grid grid-cols-2 gap-4">
                     <Input
                         type="date"
@@ -120,7 +157,6 @@ export default function BookingForm({
                     />
                 </div>
 
-                {/* Seating */}
                 <div>
                     <label className="text-sm font-medium">Seating Preference</label>
                     <div className="flex gap-4 mt-1">
@@ -148,7 +184,6 @@ export default function BookingForm({
                     </div>
                 </div>
 
-                {/* Request */}
                 <div>
                     <label className="text-sm font-medium">Additional Request</label>
                     <Textarea
@@ -160,7 +195,6 @@ export default function BookingForm({
                     />
                 </div>
 
-                {/* Newsletter */}
                 <div className="flex items-center gap-2">
                     <input
                         type="checkbox"
@@ -172,10 +206,21 @@ export default function BookingForm({
                     <span>Subscribe to newsletter</span>
                 </div>
 
-                {/* Button */}
-                <Button className="w-full mt-4" onClick={handleSubmit}>
-                    {editData ? "Update Booking" : "Request Booking"}
-                </Button>
+                <div className="flex justify-start">
+                    <Button
+                        className={`w-auto mt-4 ${editData ? "bg-yellow-400 hover:bg-yellow-500" : "bg-blue-500 hover:bg-blue-600"
+                            }`}
+                        onClick={handleSubmit}
+                    >
+                        {editData ? "Update Booking" : "Request Booking"}
+                    </Button>
+
+                    {editData ? (
+                        <Button className="w-auto ms-2 mt-4" variant="outline" onClick={handleCancel}>
+                            Cancel
+                        </Button>
+                    ) : null}
+                </div>
 
             </div>
         </div>
