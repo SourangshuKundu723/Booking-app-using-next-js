@@ -105,7 +105,7 @@ export default function BookingForm({ bookings, setBookings, editData, setEditDa
 
                 <div className="grid grid-cols-2 gap-4">
                     <div>
-                        <label className="text-sm font-medium">First Name</label>
+                        <label className="text-sm font-medium">First Name<div className="inline-block text-red-600">*</div></label>
                         <Input
                             placeholder="Enter first name"
                             value={form.firstName}
@@ -116,7 +116,7 @@ export default function BookingForm({ bookings, setBookings, editData, setEditDa
                     </div>
 
                     <div>
-                        <label className="text-sm font-medium">Last Name</label>
+                        <label className="text-sm font-medium">Last Name<div className="inline-block text-red-600">*</div></label>
                         <Input
                             placeholder="Enter last name"
                             value={form.lastName}
@@ -128,7 +128,7 @@ export default function BookingForm({ bookings, setBookings, editData, setEditDa
                 </div>
 
                 <div>
-                    <label className="text-sm font-medium">Phone</label>
+                    <label className="text-sm font-medium">Phone<div className="inline-block text-red-600">*</div></label>
                     <Input
                         placeholder="Enter phone number"
                         value={form.phone}
@@ -138,7 +138,7 @@ export default function BookingForm({ bookings, setBookings, editData, setEditDa
                     />
                 </div>
 
-                <label className="text-sm font-medium">Date & Time</label>
+                <label className="text-sm font-medium">Date & Time<div className="inline-block text-red-600">*</div></label>
                 <div className="grid grid-cols-2 gap-4">
                     <Input
                         type="date"
@@ -158,7 +158,7 @@ export default function BookingForm({ bookings, setBookings, editData, setEditDa
                 </div>
 
                 <div>
-                    <label className="text-sm font-medium">Seating Preference</label>
+                    <label className="text-sm font-medium">Seating Preference<div className="inline-block text-red-600">*</div></label>
                     <div className="flex gap-4 mt-1">
                         <label>
                             <input
